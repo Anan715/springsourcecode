@@ -1,5 +1,7 @@
 buildscript {
 	repositories {
+		maven { url "https://maven.aliyun.com/repository/public" }
+		maven { url "https://maven.aliyun.com/repository/gradle-plugin" }
 		maven { url "https://repo.spring.io/plugins-release" }
 	}
 	dependencies {
@@ -63,7 +65,7 @@ configure(allprojects) { project ->
 	apply plugin: "propdeps"
 	apply plugin: "test-source-set-dependencies"
 	apply plugin: "io.spring.dependency-management"
-	apply from: "${gradleScriptDir}/ide.gradle"
+//	apply from: "${gradleScriptDir}/ide.gradle"
 
 	dependencyManagement {
 		resolutionStrategy {
@@ -148,6 +150,8 @@ configure(allprojects) { project ->
 	}
 
 	repositories {
+		maven { url "https://maven.aliyun.com/repository/public" }
+		maven { url "https://maven.aliyun.com/repository/gradle-plugin" }
 		maven { url "https://repo.spring.io/libs-release" }
 		maven { url "https://repo.spring.io/snapshot" } // Reactor
 	}
@@ -223,6 +227,7 @@ configure(subprojects - project(":spring-build-src")) { subproject ->
 		options.use = true
 		options.links(project.ext.javadocLinks)
 		options.addStringOption("Xdoclint:none", "-quiet")
+		failOnError = false
 
 		// Suppress warnings due to cross-module @see and @link references.
 		// Note that global 'api' task does display all warnings.
@@ -284,9 +289,9 @@ configure(rootProject) {
 	}
 
 	artifacts {
-		archives docsZip
-		archives schemaZip
-		archives distZip
+//		archives docsZip
+//		archives schemaZip
+//		archives distZip
 	}
 
 	wrapper {

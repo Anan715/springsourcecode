@@ -137,9 +137,9 @@ public class ClassPathXmlApplicationContext extends AbstractXmlApplicationContex
 	public ClassPathXmlApplicationContext(
 			String[] configLocations, boolean refresh, @Nullable ApplicationContext parent)
 			throws BeansException {
-
+		// todo 调用父类构造方法进行相关对象的创建
 		super(parent);
-		setConfigLocations(configLocations);
+		setConfigLocations(configLocations); // todo 配置环境属性 configLocations：配置文件路径,
 		if (refresh) {
 			refresh();
 		}

@@ -41,7 +41,7 @@ import org.springframework.lang.Nullable;
  * @see BeanFactoryPostProcessor
  */
 public interface BeanPostProcessor {
-
+	// 增强 bean信息
 	/**
 	 * Apply this BeanPostProcessor to the given new bean instance <i>before</i> any bean
 	 * initialization callbacks (like InitializingBean's {@code afterPropertiesSet}

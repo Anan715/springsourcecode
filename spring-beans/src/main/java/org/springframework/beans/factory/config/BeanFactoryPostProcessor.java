@@ -44,7 +44,7 @@ import org.springframework.beans.BeansException;
  */
 @FunctionalInterface
 public interface BeanFactoryPostProcessor {
-
+	// 增强beanDefination信息
 	/**
 	 * Modify the application context's internal bean factory after its standard
 	 * initialization. All bean definitions will have been loaded, but no beans
