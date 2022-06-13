@@ -454,6 +454,7 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader
 	 * @see org.springframework.core.io.support.PathMatchingResourcePatternResolver
 	 */
 	protected ResourcePatternResolver getResourcePatternResolver() {
+		// 创建一个资源模式解析器用来解析 XML 文件
 		return new PathMatchingResourcePatternResolver(this);
 	}
 
@@ -562,9 +563,11 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader
 				}
 
 				// Destroy already created singletons to avoid dangling resources.
+				// 为防止 bean 资源占用，在异常处理中。销毁在前面过程中已经生成的单例bean
 				destroyBeans();
 
 				// Reset 'active' flag.
+				// 重置 active 标志
 				cancelRefresh(ex);
 
 				// Propagate exception to caller.
@@ -585,6 +588,7 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader
 	 */
 	protected void prepareRefresh() {
 		// Switch to active.
+		// 设置容器启动时间
 		this.startupDate = System.currentTimeMillis();
 		this.closed.set(false);
 		this.active.set(true);
