@@ -516,7 +516,10 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader
 	public void refresh() throws BeansException, IllegalStateException {
 		synchronized (this.startupShutdownMonitor) {
 			// 准备刷新工作
-			// 1:设置刷新时间 2：设置关闭状态 false，设置活跃状态 true 3：获取环境对象， 4：创建事件和监听器对象的集合，默认为空
+			// 1:设置刷新时间
+			// 2：设置关闭状态 false，设置活跃状态 true
+			// 3：获取环境对象，
+			// 4：创建事件和监听器对象的集合，默认为空
 			prepareRefresh();
 
 			// Tell the subclass to refresh the internal bean factory.
@@ -660,11 +663,11 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader
 		// 为 beanFactory 增加一个默认的 propertyEditor,这个主要是对 bean 的属性等设置管理的一个工具类
 		beanFactory.addPropertyEditorRegistrar(new ResourceEditorRegistrar(this, getEnvironment()));
 
-		// Configure the bean factory with context callbacks. todo Ignore Aware
+		// Configure the bean factory with context callbacks.
 		// 添加 beanPostProcessor，ApplicationContextAwareProcessor 用来完成某些 Aware 对象的注入
 		beanFactory.addBeanPostProcessor(new ApplicationContextAwareProcessor(this));
-		// 设置要忽略的自动装配的接口，这些接口的实现是由 set 方法进行注入的
-		// 所以在使用 autowire 进行注入的时候需要将这些接口忽略
+		// 设置要忽略的自动装配的接口，这些接口的实现是由 set 方法进行注入的，
+		// 所以在使用 autowire 进行注入的时候需要将这些接口忽略 (上一个方法已经将下列 aware 处理)
 		beanFactory.ignoreDependencyInterface(EnvironmentAware.class);
 		beanFactory.ignoreDependencyInterface(EmbeddedValueResolverAware.class);
 		beanFactory.ignoreDependencyInterface(ResourceLoaderAware.class);
