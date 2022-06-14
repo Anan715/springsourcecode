@@ -16,9 +16,9 @@
 
 package org.springframework.context.annotation.spr12233;
 
+import lombok.Value;
 import org.junit.Test;
 
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.ConditionContext;
@@ -74,7 +74,6 @@ public class Spr12233Tests {
 	@Conditional(NeverConfigurationCondition.class)
 	static class ConditionWithPropertyValueInjection {
 
-		@Value("${idontexist}")
 		private String property;
 	}
 }

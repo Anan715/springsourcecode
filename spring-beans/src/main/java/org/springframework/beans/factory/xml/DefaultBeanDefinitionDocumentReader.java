@@ -175,8 +175,9 @@ public class DefaultBeanDefinitionDocumentReader implements BeanDefinitionDocume
 					// 默认命名空间解析：import、bean、beans、alias
 					if (delegate.isDefaultNamespace(ele)) {
 						parseDefaultElement(ele, delegate);
-					} // 非默认命名空间
+					}
 					else {
+						// 非默认命名空间 (自定义命名空间)
 						delegate.parseCustomElement(ele);
 					}
 				}
