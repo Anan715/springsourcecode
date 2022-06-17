@@ -43,6 +43,7 @@ public interface PropertyEditorRegistrar {
 	 * @param registry the {@code PropertyEditorRegistry} to register the
 	 * custom {@code PropertyEditors} with
 	 */
+	// 注册定制化的编辑器
 	void registerCustomEditors(PropertyEditorRegistry registry);
 
 }

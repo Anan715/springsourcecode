@@ -42,6 +42,10 @@ import org.springframework.util.ObjectUtils;
  * @author Juergen Hoeller
  * @since 4.3.4
  */
+
+// 此类用来检测 bean 是否实现 ApplicationListener 接口，两个作用：
+// 1：实例化完成之后，如果 bean 是单例的，并且属于 ApplicationListener 接口，则加入多播器中
+// 2: bean 销毁之前，如果bean是一个ApplicationListener，则从多播器删除
 class ApplicationListenerDetector implements DestructionAwareBeanPostProcessor, MergedBeanDefinitionPostProcessor {
 
 	private static final Log logger = LogFactory.getLog(ApplicationListenerDetector.class);
