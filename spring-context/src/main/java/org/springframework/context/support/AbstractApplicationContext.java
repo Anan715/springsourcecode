@@ -694,6 +694,7 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader
 		// 运行期织入是指采用 cglib 和 jdk 进行切面织入
 		// aspectJ 提供两种织入方式，第一种是通过特殊的编译器，在编译期，将 aspectJ 语言编写的切面类织入到 java 类中，
 		// 第二种是加载期织入，驾驶下面的 load time weaving
+		// 简言之：AOP 的一些准备工作
 		if (beanFactory.containsBean(LOAD_TIME_WEAVER_BEAN_NAME)) {
 			beanFactory.addBeanPostProcessor(new LoadTimeWeaverAwareProcessor(beanFactory));
 			// Set a temporary ClassLoader for type matching.
@@ -720,6 +721,7 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader
 	 * BeanPostProcessors etc in certain ApplicationContext implementations.
 	 * @param beanFactory the bean factory used by the application context
 	 */
+	// 留给子类扩展的接口
 	protected void postProcessBeanFactory(ConfigurableListableBeanFactory beanFactory) {
 	}
 
