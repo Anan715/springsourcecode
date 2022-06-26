@@ -260,8 +260,9 @@ public class ConfigurationClassPostProcessor implements BeanDefinitionRegistryPo
 	/**
 	 *  构建和验证一个类是否被 @Configuration修饰，并做相关的解析工作
 	 */
+	// SpringBoot自动装配原理
 	public void processConfigBeanDefinitions(BeanDefinitionRegistry registry) {
-		// 创建 BeanDefinitionHolder 集合对象
+		// 创建 BeanDefinitionHolder 集合对象,存放（配置类、注解类的集合信息）
 		List<BeanDefinitionHolder> configCandidates = new ArrayList<>();
 		// 当前的 registry 就是 DefaultListAbleBeanfactory,获取所有已经注册 beanDefination 的 beanName
 		String[] candidateNames = registry.getBeanDefinitionNames();
@@ -305,12 +306,14 @@ public class ConfigurationClassPostProcessor implements BeanDefinitionRegistryPo
 			sbr = (SingletonBeanRegistry) registry;
 			// 判断是否有自定义 beanName 生成器
 			if (!this.localBeanNameGeneratorSet) {
-				// 获取 beanName 生成器
+				// 获取自定义 beanName 生成器
 				BeanNameGenerator generator = (BeanNameGenerator) sbr.getSingleton(CONFIGURATION_BEAN_NAME_GENERATOR);
+				// 如果有自定义的命名生成策略
 				if (generator != null) {
 					// componentScanBeanNameGenerator、importBeanNameGenerator 定义时就赋值了 new AnnotationBeanNamegenerator
-					// 如果 spring有默认的 beanName 生成器，则重新赋值
+					// 设置组件扫描的 beanName 生成策略
 					this.componentScanBeanNameGenerator = generator;
+					// 设置 import bean Name 生产策略
 					this.importBeanNameGenerator = generator;
 				}
 			}
@@ -331,10 +334,12 @@ public class ConfigurationClassPostProcessor implements BeanDefinitionRegistryPo
 		// alreadyParsed 用于判断是否处理过了
 		Set<ConfigurationClass> alreadyParsed = new HashSet<>(configCandidates.size());
 		do {
+			// 解析带有 @Controller,@Component、@ComponentScan，@Import、@ImportResource、@Bean 的 BeanDefination
 			parser.parse(candidates);
 			parser.validate();
 
 			Set<ConfigurationClass> configClasses = new LinkedHashSet<>(parser.getConfigurationClasses());
+			// 移除已经解析的配置类
 			configClasses.removeAll(alreadyParsed);
 
 			// Read the model and create bean definitions based on its content
@@ -343,7 +348,8 @@ public class ConfigurationClassPostProcessor implements BeanDefinitionRegistryPo
 						registry, this.sourceExtractor, this.resourceLoader, this.environment,
 						this.importBeanNameGenerator, parser.getImportRegistry());
 			}
-			// 将上一步 parser解析出的 ConfigurationClass类加载成 beandefination，实际经上一步的parse后，解析出来的 bean 已经存放到 beanDefination中
+			// 将上一步 parser解析出的 ConfigurationClass类加载成 beandefination，实际经上一步的parse后，
+			// 解析出来的 bean 已经存放到 beanDefination中
 			// 但是这些 bean 会引出新的 bean,(如 在bean中出现了 @Bean 标注的方法)
 			// 因此需要执行一次 loadBeanDefinitions，这样就会执行 ImportBeanDefinationRegistory接口或者ImportSelector接口
 			this.reader.loadBeanDefinitions(configClasses);

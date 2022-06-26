@@ -78,11 +78,18 @@ class ConditionEvaluator {
 	 * @return if the item should be skipped
 	 */
 	public boolean shouldSkip(@Nullable AnnotatedTypeMetadata metadata, @Nullable ConfigurationPhase phase) {
+		// metadata 为空或者配置类中不存在 @Configuration 标签
 		if (metadata == null || !metadata.isAnnotated(Conditional.class.getName())) {
 			return false;
 		}
 
+		// 采用递归的方式调用，第一次执行的时候 phase 为空，向下判断
 		if (phase == null) {
+			// 下面的逻辑需要进入 ConfigurationClassUtils.isConfigurationCandidate() 方法，主要逻辑如下
+			// 1：metaData 是 AnnotationMetadata 的一个实例
+			// 2：检查 bean 中是否使用 @Configuraton 注解
+			// 检查 bean 是否为一个接口
+			// 检查 bean 中是否包含 @Bean,@Component、@ComponentScan、@Import、@Import、@Resource注解
 			if (metadata instanceof AnnotationMetadata &&
 					ConfigurationClassUtils.isConfigurationCandidate((AnnotationMetadata) metadata)) {
 				return shouldSkip(metadata, ConfigurationPhase.PARSE_CONFIGURATION);
@@ -93,11 +100,13 @@ class ConditionEvaluator {
 		List<Condition> conditions = new ArrayList<>();
 		for (String[] conditionClasses : getConditionClasses(metadata)) {
 			for (String conditionClass : conditionClasses) {
+				// 获取到 @Configuration 注解后面的 value数据
 				Condition condition = getCondition(conditionClass, this.context.getClassLoader());
 				conditions.add(condition);
 			}
 		}
 
+		// 对相关的条件进行排序
 		AnnotationAwareOrderComparator.sort(conditions);
 
 		for (Condition condition : conditions) {
@@ -105,7 +114,13 @@ class ConditionEvaluator {
 			if (condition instanceof ConfigurationCondition) {
 				requiredPhase = ((ConfigurationCondition) condition).getConfigurationPhase();
 			}
+			// requiredPhase 只可能为空或者是 ConfigurationCondition 的实例
 			if ((requiredPhase == null || requiredPhase == phase) && !condition.matches(this.context, metadata)) {
+				// 此逻辑为 ：
+				// 1：requiredPhase不是 ConfigurationCondition 的实例
+				// 2：phase == requiredPhase，从上述递归可知，phase 可以为 ConfigurationPhase.PARSE_CONFIGURATION 或者 ConfigurationPhase.REGISTER_BEAN
+				// 3：condition.match(this.context, metadata) 返回为 false
+				// 如果 1，2或1，3成立，则在此函数的上层将阻断bean 注入 Spring 容器
 				return true;
 			}
 		}
