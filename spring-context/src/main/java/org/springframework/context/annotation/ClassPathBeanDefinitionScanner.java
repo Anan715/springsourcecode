@@ -271,23 +271,34 @@ public class ClassPathBeanDefinitionScanner extends ClassPathScanningCandidateCo
 	protected Set<BeanDefinitionHolder> doScan(String... basePackages) {
 		Assert.notEmpty(basePackages, "At least one base package must be specified");
 		Set<BeanDefinitionHolder> beanDefinitions = new LinkedHashSet<>();
+		// 遍历 basePackages
 		for (String basePackage : basePackages) {
+			// 扫描 basePackage,查找符合的 beanDefination
 			Set<BeanDefinition> candidates = findCandidateComponents(basePackage);
+			// 遍历所有的候选 beanDefination
 			for (BeanDefinition candidate : candidates) {
+				// 解析 @Scope 注解，包括scopeName,proxyMode
 				ScopeMetadata scopeMetadata = this.scopeMetadataResolver.resolveScopeMetadata(candidate);
 				candidate.setScope(scopeMetadata.getScopeName());
+				// 生成 beanName
 				String beanName = this.beanNameGenerator.generateBeanName(candidate, this.registry);
 				if (candidate instanceof AbstractBeanDefinition) {
+					// 处理 beanDefination 对象，例如此bean是否可以自动装配到其他 bean 中
 					postProcessBeanDefinition((AbstractBeanDefinition) candidate, beanName);
 				}
 				if (candidate instanceof AnnotatedBeanDefinition) {
+					// 处理定义在目标类上的通用注解，包括 @Lazy,@Primary,@DependsOn,@Role@Description
 					AnnotationConfigUtils.processCommonDefinitionAnnotations((AnnotatedBeanDefinition) candidate);
 				}
+				// 检查 bean 是否已经注册过，如果已注册，检查是否兼容
 				if (checkCandidate(beanName, candidate)) {
+					// 将当前遍历 bean 的 beanDefination 和 beanName 封装成 BeanDefinationHodler
 					BeanDefinitionHolder definitionHolder = new BeanDefinitionHolder(candidate, beanName);
+					// 根据 proxyMode 值选择是否创建域代理
 					definitionHolder =
 							AnnotationConfigUtils.applyScopedProxyMode(scopeMetadata, definitionHolder, this.registry);
 					beanDefinitions.add(definitionHolder);
+					// 注册 BeanDefinition
 					registerBeanDefinition(definitionHolder, this.registry);
 				}
 			}

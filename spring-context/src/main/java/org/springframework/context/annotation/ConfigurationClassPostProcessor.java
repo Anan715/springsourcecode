@@ -66,6 +66,11 @@ import org.springframework.util.ClassUtils;
 import static org.springframework.context.annotation.AnnotationConfigUtils.CONFIGURATION_BEAN_NAME_GENERATOR;
 
 /**
+ * 此类是一个后置处理器的类，主要功能是参与 BeanFactory 的创建。主要功能：
+ * 1：解析加了 @Configuration 配置的类，
+ * 2：解析@ComponentScan 扫描的包
+ * 3:解析@ComponentScans 扫描的包
+ * 4：解析 @Import 注解
  * {@link BeanFactoryPostProcessor} used for bootstrapping processing of
  * {@link Configuration @Configuration} classes.
  *
@@ -267,7 +272,7 @@ public class ConfigurationClassPostProcessor implements BeanDefinitionRegistryPo
 		// 当前的 registry 就是 DefaultListAbleBeanfactory,获取所有已经注册 beanDefination 的 beanName
 		String[] candidateNames = registry.getBeanDefinitionNames();
 
-		// 遍历所有要处理的beanDefination名称
+		// 遍历所有要处理的beanDefination名称，筛选被注解修饰的 beanDefination
 		for (String beanName : candidateNames) {
 			// 获取指定的 BeanDefinition
 			BeanDefinition beanDef = registry.getBeanDefinition(beanName);

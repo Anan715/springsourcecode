@@ -293,10 +293,12 @@ class ConfigurationClassParser {
 		if (!componentScans.isEmpty() &&
 				!this.conditionEvaluator.shouldSkip(sourceClass.getMetadata(), ConfigurationPhase.REGISTER_BEAN)) {
 			for (AnnotationAttributes componentScan : componentScans) {
-				// 解析 @ComponentScan、ComponentScans配置的扫描包所含的类，解析成 beanDefination，可以理解为 beanDefinationHodler
+				// 解析 @ComponentScan、ComponentScans配置的扫描包所含的类，解析成 beanDefination，
+				// 可以理解为 beanDefinationHodler
 				Set<BeanDefinitionHolder> scannedBeanDefinitions =
 						this.componentScanParser.parse(componentScan, sourceClass.getMetadata().getClassName());
-				// 有可能扫描出来的 bean 也添加了 @ComponentScan、ComponentScans 注解，所以这里要循环遍历一次继续解析直到类中没有@ComponentScan、ComponentScans注解·
+				// 有可能扫描出来的 bean 也添加了 @ComponentScan、ComponentScans 注解，
+				// 所以这里要循环遍历一次继续解析直到类中没有@ComponentScan、ComponentScans注解·
 				for (BeanDefinitionHolder holder : scannedBeanDefinitions) {
 					BeanDefinition bdCand = holder.getBeanDefinition().getOriginatingBeanDefinition();
 					if (bdCand == null) {
@@ -319,7 +321,7 @@ class ConfigurationClassParser {
 		processImports(configClass, sourceClass, getImports(sourceClass), true);
 
 		// Process any @ImportResource annotations
-		//处理 @ImportResorce 注解引入的配置文件
+		//处理 @ImportResorce 注解引入的配置文件 (Spring配置文件)
 		AnnotationAttributes importResource =
 				AnnotationConfigUtils.attributesFor(sourceClass.getMetadata(), ImportResource.class);
 		if (importResource != null) {
@@ -339,9 +341,11 @@ class ConfigurationClassParser {
 		}
 
 		// Process default methods on interfaces
+		// 处理接口默认方法实现，从 jdk8 开始，接口中的方法可以有自己默认的实现
 		processInterfaces(configClass, sourceClass);
 
 		// Process superclass, if any
+		// 解析父类，如果被解析的配置类有父类，那么父类也会被解析
 		if (sourceClass.getMetadata().hasSuperClass()) {
 			String superclass = sourceClass.getMetadata().getSuperClassName();
 			if (superclass != null && !superclass.startsWith("java") &&
@@ -525,8 +529,11 @@ class ConfigurationClassParser {
 	 * Returns {@code @Import} class, considering all meta-annotations.
 	 */
 	private Set<SourceClass> getImports(SourceClass sourceClass) throws IOException {
+		// 创建集合，存储包含 @Import 注解的类
 		Set<SourceClass> imports = new LinkedHashSet<>();
+		// 创建集合，实现递归调用
 		Set<SourceClass> visited = new LinkedHashSet<>();
+		// 收集 @Import 注解的类
 		collectImports(sourceClass, imports, visited);
 		return imports;
 	}
