@@ -114,7 +114,7 @@ class ComponentScanAnnotationParser {
 			scanner.getBeanDefinitionDefaults().setLazyInit(true);
 		}
 
-		// // 获取 basePackage 属性
+		// 获取 basePackage 属性
 		Set<String> basePackages = new LinkedHashSet<>();
 		String[] basePackagesArray = componentScan.getStringArray("basePackages");
 		for (String pkg : basePackagesArray) {
@@ -122,6 +122,7 @@ class ComponentScanAnnotationParser {
 					ConfigurableApplicationContext.CONFIG_LOCATION_DELIMITERS);
 			Collections.addAll(basePackages, tokenized);
 		}
+		// 获取 basePackageClasses 属性
 		for (Class<?> clazz : componentScan.getClassArray("basePackageClasses")) {
 			basePackages.add(ClassUtils.getPackageName(clazz));
 		}
@@ -135,6 +136,7 @@ class ComponentScanAnnotationParser {
 				return declaringClass.equals(className);
 			}
 		});
+		// 开始执行扫描，最终扫描器为 ClassPathBeanDefinitionScanner
 		return scanner.doScan(StringUtils.toStringArray(basePackages));
 	}
 
