@@ -37,6 +37,7 @@ import org.springframework.lang.Nullable;
  * @see org.springframework.context.support.ResourceBundleMessageSource
  * @see org.springframework.context.support.ReloadableResourceBundleMessageSource
  */
+// 此接口提供了处理消息的策略，包含了信息国际化和包含参数的信息替换
 public interface MessageSource {
 
 	/**
@@ -52,6 +53,11 @@ public interface MessageSource {
 	 * @return the resolved message if the lookup was successful;
 	 * otherwise the default message passed as a parameter
 	 * @see java.text.MessageFormat
+	 *  解析code对应的信息进行返回。如果对应的code不能解析，则返回默认的 defaulfMessage
+	 *  code：需要进行解析的code,对应资源文件的一个属性名
+	 *  args: 需要用来替换code对应的信息中包含参数的内容
+	 *  defaultMessage ： 对应code 的信息不存在时返回的默认的值
+	 *  locale ： 对应的 locale 对象
 	 */
 	@Nullable
 	String getMessage(String code, @Nullable Object[] args, @Nullable String defaultMessage, Locale locale);
@@ -66,6 +72,8 @@ public interface MessageSource {
 	 * @return the resolved message
 	 * @throws NoSuchMessageException if the message wasn't found
 	 * @see java.text.MessageFormat
+	 * 解析code对应的信息进行返回。如果对应的code不能解析，则抛异常：NoSuchMessageException
+	 * 参数同上
 	 */
 	String getMessage(String code, @Nullable Object[] args, Locale locale) throws NoSuchMessageException;
 

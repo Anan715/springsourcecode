@@ -39,24 +39,28 @@ public interface ApplicationEventMulticaster {
 	 * Add a listener to be notified of all events.
 	 * @param listener the listener to add
 	 */
+	// 添加监听器接受所有的事件通知
 	void addApplicationListener(ApplicationListener<?> listener);
 
 	/**
 	 * Add a listener bean to be notified of all events.
 	 * @param listenerBeanName the name of the listener bean to add
 	 */
+	// 添加监听器接受所有的事件通知，参数是监听器 bean 名称
 	void addApplicationListenerBean(String listenerBeanName);
 
 	/**
 	 * Remove a listener from the notification list.
 	 * @param listener the listener to remove
 	 */
+	// 从监听器列表中删除监听器
 	void removeApplicationListener(ApplicationListener<?> listener);
 
 	/**
 	 * Remove a listener bean from the notification list.
 	 * @param listenerBeanName the name of the listener bean to add
 	 */
+	// 删除注册到代理上的所有监听器，在remove调用之后，代理不会对事件通知执行任何操作直到有新的监听器注册
 	void removeApplicationListenerBean(String listenerBeanName);
 
 	/**
@@ -64,6 +68,7 @@ public interface ApplicationEventMulticaster {
 	 * <p>After a remove call, the multicaster will perform no action
 	 * on event notification until new listeners are being registered.
 	 */
+	// 删除注册到代理上的所有监听器，在remove调用之后，代理不会对事件通知执行任何操作直到有新的监听器注册
 	void removeAllListeners();
 
 	/**
