@@ -28,6 +28,7 @@ package org.springframework.core.convert.converter;
  * for example {@link Number} for a set of number subtypes.
  * @see ConditionalConverter
  */
+// convert 转换器工厂类，用来获取对应的转换器 N  ->  N
 public interface ConverterFactory<S, R> {
 
 	/**

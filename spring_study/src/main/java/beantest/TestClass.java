@@ -11,6 +11,10 @@ public class TestClass {
 		B b = context.getBean(B.class);
 		b.sout();
 
+		Student student = (Student) context.getBean("studentFactoryBean");
+		System.out.println("student.getUserName() = " + student.getUserName());
+
+
 		// FactoryBean 接口测试
 //		ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext("applicationContext.xml");
 //		B b =(B) context.getBean("a");

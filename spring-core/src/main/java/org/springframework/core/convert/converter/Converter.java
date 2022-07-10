@@ -40,6 +40,7 @@ public interface Converter<S, T> {
 	 * @throws IllegalArgumentException if the source cannot be converted to the desired target type
 	 */
 	@Nullable
+	// 一种类型转换为另一种类型 一对一
 	T convert(S source);
 
 }

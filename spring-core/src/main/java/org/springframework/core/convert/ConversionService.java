@@ -26,6 +26,7 @@ import org.springframework.lang.Nullable;
  * @author Phillip Webb
  * @since 3.0
  */
+// 类型转换服务
 public interface ConversionService {
 
 	/**
@@ -42,6 +43,7 @@ public interface ConversionService {
 	 * @return {@code true} if a conversion can be performed, {@code false} if not
 	 * @throws IllegalArgumentException if {@code targetType} is {@code null}
 	 */
+	// 判断能否进行类型转换
 	boolean canConvert(@Nullable Class<?> sourceType, Class<?> targetType);
 
 	/**
@@ -73,6 +75,7 @@ public interface ConversionService {
 	 * @throws IllegalArgumentException if targetType is {@code null}
 	 */
 	@Nullable
+	// 类型转换。获取合适的转换器进行类型的转换，默认是DefaultConversionService，也可以是自定义的
 	<T> T convert(@Nullable Object source, Class<T> targetType);
 
 	/**
